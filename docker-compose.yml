@@ -1,0 +1,10 @@
+services:
+  semantix:
+    build: .
+    container_name: semantix
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data   # modèle word2vec + clé des jetons de partie
+    mem_limit: 512m

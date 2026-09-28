@@ -1,0 +1,13 @@
+{
+  "name": "semantix-illimite",
+  "version": "1.0.0",
+  "description": "Clone de Cémantix en parties illimitées, avec le même modèle word2vec (frWac, J.-P. Fauconnier).",
+  "type": "module",
+  "private": true,
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "download-model": "node scripts/download-model.js",
+    "build-static": "node scripts/build-static.js",
+    "start": "node server/index.js"
+  }
+}

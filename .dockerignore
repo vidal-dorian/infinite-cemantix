@@ -1,0 +1,4 @@
+data/
+dist-static/
+node_modules/
+.git/

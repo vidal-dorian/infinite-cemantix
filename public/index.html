@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sémantix Illimité</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500;600;700&family=Unbounded:wght@700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>Sémantix <span>∞</span></h1>
+      <small id="game-label">Partie n° 1</small>
+    </div>
+    <div class="actions">
+      <button type="button" id="btn-giveup">Abandonner</button>
+      <button type="button" id="btn-new" class="primary">Nouvelle partie</button>
+    </div>
+  </header>
+
+  <form id="guess-form" autocomplete="off">
+    <input id="guess" name="guess" type="text" aria-label="Votre proposition" placeholder="Proposez un mot…" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" maxlength="40">
+    <button type="submit" class="primary" id="btn-send">Envoyer</button>
+  </form>
+  <p class="msg" id="msg" role="status" aria-live="polite"></p>
+
+  <section class="panel result" id="result" hidden></section>
+
+  <section class="panel">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>N°</th><th>Mot</th><th style="text-align:right">°C</th><th></th><th>Progression</th></tr>
+        </thead>
+        <tbody class="latest" id="latest"></tbody>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="empty" id="empty">
+      <strong>Un nouveau mot secret vous attend.</strong><br>
+      Proposez n'importe quel mot : plus il est proche par le sens, plus il est chaud.
+    </div>
+  </section>
+
+  <section class="panel" id="nearby" hidden>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>‰</th><th>Mot proche</th><th style="text-align:right">°C</th></tr></thead>
+        <tbody id="nearby-rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel stats" id="stats"></section>
+
+  <details class="panel rules">
+    <summary>Règles</summary>
+    <ul>
+      <li>Trouvez le mot secret. Chaque proposition reçoit une <strong>température</strong> : la similarité cosinus entre les deux mots dans le modèle word2vec, multipliée par 100.</li>
+      <li>Si le mot fait partie des 1000 mots les plus proches du mot secret, une <strong>progression</strong> en ‰ s'affiche : 999 ‰ pour le plus proche, 1 ‰ pour le 999<sup>e</sup>. Le mot secret vaut 1000 ‰.</li>
+      <li>🧊 température négative · 🥶 hors du top 1000 · 😎 top 1000 · 🥵 ≥ 900 ‰ · 🔥 ≥ 990 ‰ · 😱 999 ‰ · 🥳 trouvé.</li>
+      <li>Seules les formes de base sont connues : infinitif pour les verbes, masculin singulier pour les noms et adjectifs (<code>chanter</code>, pas <code>chantons</code>). Les accents oubliés sont rattrapés quand il n'y a pas d'ambiguïté.</li>
+      <li>Parties illimitées : une nouvelle partie tire un nouveau mot au hasard.</li>
+    </ul>
+  </details>
+
+  <footer>
+    Modèle <a href="https://fauconnier.github.io/#data" target="_blank" rel="noopener">frWac word2vec (J.-P. Fauconnier)</a>, CC-BY 3.0, le même que Cémantix. Jeu d'origine : <a href="https://cemantix.certitudes.org" target="_blank" rel="noopener">Cémantix</a> par enigmathix. <!--POOL-->
+  </footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
