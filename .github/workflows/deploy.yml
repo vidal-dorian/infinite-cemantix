@@ -1,0 +1,44 @@
+name: Déploiement
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Déployer sur le Raspberry Pi
+    runs-on: [self-hosted, Linux, ARM64]
+    env:
+      # Copie de production : contient les fichiers non versionnés
+      # (secrets, données, surcharges compose) qui doivent survivre au déploiement.
+      APP_DIR: /mnt/data/home/infinite-cemantix
+    steps:
+      - name: Mettre à jour le code
+        run: |
+          cd "$APP_DIR"
+          git fetch origin main
+          git checkout main
+          git merge --ff-only origin/main
+
+      - name: Construire et relancer les conteneurs
+        run: |
+          cd "$APP_DIR"
+          docker compose up -d --build
+          docker image prune -f
+
+      - name: Vérifier que l'application répond
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fs -o /dev/null -H "Host: cemantix.dorianvidal.com" http://localhost/; then
+              echo "Application opérationnelle."
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "L'application ne répond pas après le déploiement." >&2
+          exit 1
